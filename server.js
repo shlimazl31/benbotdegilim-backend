@@ -40,6 +40,8 @@ app.post('/submit', async (req, res) => {
     }
 
     try {
+        console.log('Gönderilen token:', token); // 🔍 Token'ı kontrol et
+
         const response = await axios.post(
             `https://www.google.com/recaptcha/api/siteverify`,
             null,
@@ -51,14 +53,13 @@ app.post('/submit', async (req, res) => {
             }
         );
 
-        console.log("📌 reCAPTCHA Yanıtı:", response.data); // 🌟 Log eklendi!
+        console.log('reCAPTCHA API Yanıtı:', response.data); // 🔍 API'den dönen sonucu kontrol et
 
         if (!response.data.success) {
             return res.status(400).json({ error: 'reCAPTCHA doğrulaması başarısız', details: response.data });
         }
 
-        const score = response.data.score;
-        const status = score >= 0.5 ? 'Geçti' : 'Başarısız';
+        const status = 'Geçti';
 
         db.run(`INSERT INTO users (nickname, status) VALUES (?, ?)`, [nickname, status], (err) => {
             if (err) {
