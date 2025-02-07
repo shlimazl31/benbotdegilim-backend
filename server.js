@@ -51,8 +51,10 @@ app.post('/submit', async (req, res) => {
             }
         );
 
+        console.log("📌 reCAPTCHA Yanıtı:", response.data); // 🌟 Log eklendi!
+
         if (!response.data.success) {
-            return res.status(400).json({ error: 'reCAPTCHA doğrulaması başarısız' });
+            return res.status(400).json({ error: 'reCAPTCHA doğrulaması başarısız', details: response.data });
         }
 
         const score = response.data.score;
